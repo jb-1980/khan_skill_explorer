@@ -20,8 +20,10 @@ export default class Selector extends Component {
   }
 
   componentDidMount(){
-    const {getSkillList} = this.props
-    getSkillList()
+    const {getSkillList, skill_list} = this.props
+    if(Object.getOwnPropertyNames(skill_list).length === 0){
+      getSkillList()
+    }
   }
 
   render(){

@@ -5,6 +5,14 @@ export const REQUEST_SKILL = 'REQUEST_SKILL'
 export const RECEIVE_SKILL = 'RECEIVE_SKILL'
 export const REQUEST_SKILL_LIST = 'REQUEST_SKILL_LIST'
 export const RECEIVE_SKILL_LIST = 'RECEIVE_SKILL_LIST'
+export const SET_SKILL_NAME = 'SET_SKILL_NAME'
+
+export function setSkillName(skill_name){
+  return {
+    type: SET_SKILL_NAME,
+    skill_name: skill_name
+  }
+}
 
 export function selectSkill(e){
   return {
@@ -45,15 +53,13 @@ export function getSkillList(){
 
     const url = 'https://www.khanacademy.org/api/internal/exercises/math_topics_and_exercises'
     return fetch(url)
+      .then(handleErrors)
       .then(response => response.json())
       .then(json => {
-        var skill_list = json.exercises.map(skill => {
-          return {
-            name: skill.name,
-            title: skill.display_name
-          }
+        let skill_list = {}
+        json.exercises.forEach(skill => {
+          skill_list[skill.name] = skill
         })
-
         dispatch(receiveSkillList(skill_list))
       })
 
@@ -66,10 +72,19 @@ export function fetchSkill(skillname){
 
     const url = 'http://www.khanacademy.org/api/v1/exercises/'+skillname
     return fetch(url)
+      .then(handleErrors)
       .then(response => response.json())
       .then(json =>
         dispatch(receiveSkill(json))
       )
 
   }
+}
+
+// Thanks to https://www.tjvantoll.com/2015/09/13/fetch-and-errors/ for this idea
+function handleErrors(response) {
+    if (!response.ok) {
+        throw Error(response.statusText);
+    }
+    return response;
 }

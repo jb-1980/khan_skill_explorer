@@ -16,8 +16,10 @@ export default class Sidebar extends Component {
   }
 
   componentDidMount(){
-    const {getMissionList} = this.props
-    getMissionList()
+    const {getMissionList, missions} = this.props
+    if(missions){
+      getMissionList()
+    }
   }
 
   render(){

@@ -1,12 +1,14 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
+import {Link} from 'react-router'
 
 import {fetchSkill} from '../actions'
 
 @connect((state) => ({
   isFetching: state.skill_explorer.skill.isFetching,
   skill: state.skill_explorer.skill.skill_props,
-  skill_name: state.skill_explorer.skill_list.selected
+  skill_name: state.skill_explorer.skill.skill_name,
+  skill_list: state.skill_explorer.skill_list.skills
 }), {fetchSkill})
 export default class SkillView extends Component {
   constructor(props){
@@ -14,21 +16,32 @@ export default class SkillView extends Component {
   }
 
   componentDidMount(){
-    const {fetchSkill, selected} = this.props
-    if(selected){
-      fetchSkill(selected)
+    const {skill_name, fetchSkill} = this.props
+    if(skill_name){
+      fetchSkill(skill_name)
     }
 
   }
 
+  componentWillReceiveProps(nextProps){
+    const {skill_name, fetchSkill} = nextProps
+    if(skill_name){
+      fetchSkill(skill_name)
+    }
+  }
+
   render(){
-    const {isFetching,skill} = this.props
-    if(isFetching || !skill){
+    const {isFetching,skill,skill_list, fetchSkill} = this.props
+    if(isFetching){
       return (
         <div>Fetching skill data</div>
       )
+    } else if(!skill){
+      return (
+        <div>Select skill from menu</div>
+      )
     }
-    console.log(skill)
+
     return(
       <div>
         <h2>{skill.title}</h2>
@@ -63,7 +76,7 @@ export default class SkillView extends Component {
               {skill.related_video_readable_ids.map((video, key) => {
                  return (
                    <li className="withripple" key={key}>
-                     <a href="{video}" style={{fontSize:"1.2em"}}>{video}</a>
+                     <Link to={video} style={{fontSize:"1.2em"}}>{video}</Link>
                    </li>
                  )
               })}
@@ -77,9 +90,25 @@ export default class SkillView extends Component {
             <div className="panel-body">
               <ul style={{listStyleType:"none"}}>
               {skill.prerequisites.map((prereq, key) => {
+                  if(!skill_list[prereq]){
+                    return (
+                      <li className="withripple" key={key}>
+                        <Link
+                          to={"/skill_explorer/"+prereq}
+                          style={{fontSize:"1.2em"}}>
+                          {prereq}
+                        </Link>
+                      </li>
+                    )
+                  }
                  return (
                    <li className="withripple" key={key}>
-                     <a href="{prereq}" style={{fontSize:"1.2em"}}>{prereq}</a>
+                     <Link
+                       to={"/skill_explorer/"+prereq}
+                       style={{fontSize:"1.2em"}}
+                       >
+                       {skill_list[prereq].display_name}
+                     </Link>
                    </li>
                  )
               })}
@@ -101,7 +130,7 @@ export default class SkillView extends Component {
           <h3 className="panel-title">Description:</h3>
         </div>
         <div className="panel-body">
-          {skill.translated_description_html || "No description given."}
+          {skill.translated_description || "No description given."}
         </div>
       </div>
 

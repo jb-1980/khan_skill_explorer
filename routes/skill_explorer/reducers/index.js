@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import {
   SELECT_SKILL, REQUEST_SKILL,
   RECEIVE_SKILL, REQUEST_SKILL_LIST,
-  RECEIVE_SKILL_LIST
+  RECEIVE_SKILL_LIST, SET_SKILL_NAME
 } from '../actions'
 
 
@@ -10,7 +10,7 @@ import {
 function skill_list(state = {
   isFetching: true,
   value: '',
-  skills: []
+  skills: {}
 }, action) {
   switch (action.type) {
     case SELECT_SKILL:
@@ -37,6 +37,7 @@ function skill_list(state = {
 
 function skill(state = {
     isFetching: false,
+    skill_name: '',
     skill_props: null
 }, action) {
     switch(action.type){
@@ -50,6 +51,11 @@ function skill(state = {
         return Object.assign({}, state, {
           isFetching: false,
           skill_props: action.skill_props
+        })
+
+      case SET_SKILL_NAME:
+        return Object.assign({}, state, {
+          skill_name: action.skill_name
         })
 
       default:

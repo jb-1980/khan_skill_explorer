@@ -13,9 +13,9 @@ export default class App extends Component{
   render() {
     const {isAuthenticated, khan_data, children} = this.props
 
-    if(!isAuthenticated){
-      return <User/>
-    }
+    // if(!isAuthenticated){
+    //   return <User/>
+    // }
 
     return (
       <div>

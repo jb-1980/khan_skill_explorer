@@ -11,3 +11,12 @@ module.exports = {
     }
   ]
 }
+
+// import React from 'react'
+// import { Route, IndexRoute } from 'react-router'
+//
+// module.exports = (
+//   <Route path="/mission_explorer" component={MissionExplorer}>
+//     <Route path="/mission_explorer/:mission_name" component={MissionDisplay}/>
+//   </Route>
+// )
