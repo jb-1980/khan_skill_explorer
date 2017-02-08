@@ -4,7 +4,7 @@
   "description": "An app to explorer Khan Academy exercises, their missions, and other related properties",
   "main": "index.js",
   "scripts": {
-    "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
+    "start": "node server.bundle.js",
     "start:dev": "webpack-dev-server --inline --content-base public/ --history-api-fallback --port 3000",
     "start:prod": "node server.bundle.js",
     "build:client": "webpack",
